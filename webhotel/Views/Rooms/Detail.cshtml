@@ -1,8 +1,12 @@
-﻿<main>
+﻿@model Tuple<Room, List<Room>>
+
+<main>
     <div class="bn-room" style="background-image: url(~/img/bg_3.jpg.webp);">
         <div class="bn-room-content">
             <span><a href="~/index.html">Home></a>Rooms></span>
-            <div class="name">Cozzy Rooms</div>
+            <div class="name">
+                @Html.DisplayFor(m => m.Item1.Type.Name)
+            </div>
         </div>
         <div class="container bk-container" style="background-color: #222222; z-index: 10;">
             <form action="" class="booking-form">
@@ -50,16 +54,31 @@
             <div class="col-lg-8">
                 <div class="ctn-sld-a">
                     <div class="sld-s">
-                        <input type="radio" checked class="ck" name="radio-btn" id="rdo1" />
+                        @*<input type="radio" checked class="ck" name="radio-btn" id="rdo1" />
                         <input type="radio" class="ck" name="radio-btn" id="rdo2" />
                         <input type="radio" class="ck" name="radio-btn" id="rdo3" />
                         <input type="radio" class="ck" name="radio-btn" id="rdo4" />
                         <input type="radio" class="ck" name="radio-btn" id="rdo5" />
                         <input type="radio" class="ck" name="radio-btn" id="rdo6" />
-                        <input type="radio" class="ck" name="radio-btn" id="rdo7" />
+                        <input type="radio" class="ck" name="radio-btn" id="rdo7" />*@
+                        @for (int i = 0; i < Model.Item1.Roomimgs.Count(); i++)
+                        {
+                            if(i == 0)
+                            {
+                                <input type="radio" checked class="ck" name="radio-btn" id="rdo1" />
+                            } else {
+                                <input type="radio" class="ck" name="radio-btn" id="@Html.DisplayFor(e => i)" />
+                            }
+                            
+                        }
 
-
-                        <div class="sld sldf">
+                        @for (int i = 0; i < Model.Item1.Roomimgs.Count(); i++)
+                        {
+                            <div class="sld sldf">
+                                <img src="@Html.DisplayFor(x => Model.Item1.Roomimgs.ElementAt(i).Link)" />
+                            </div>
+                        }
+                        <!-- <div class="sld sldf">
                             <img src="~/img/a2.jpg" />
                         </div>
                         <div class="sld">
@@ -79,7 +98,7 @@
                         </div>
                         <div class="sld">
                             <img src="~/img/bg_3.jpg.webp" />
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="nvg-mn">
@@ -97,8 +116,10 @@
                     </div>
                 </div>
                 <div class="r-ct-dt">
-                    <div class="r-n-dt">Luxury Room</div>
-                    <div class="r-de-dt">When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrove, the headline of Alphabet Village and the subline of her own road, the Line Lane. Pityful a rethoric question ran over her cheek, then she continued her way.</div>
+                    <div class="r-n-dt">
+                        @Html.DisplayFor(m => m.Item1.Type.Name)
+                    </div>
+                    <div class="r-de-dt">@Html.DisplayFor(m => m.Item1.Type.Des)</div>
                 </div>
                 <div class="r-ft-dt">
                     <div class="r-ft-dt-c">
@@ -253,54 +274,63 @@
                             Related Rooms
                         </div>
                         <div class="rlt-r-r row">
-                            <div class="col-lg-6">
-                                <div class="container-card-room hide-card">
-                                    <div class="card-bd-d">
-                                        <div class="content-card">
-                                            <div class="name-card">
-                                                Suite Room
-                                            </div>
-                                            <div class="des-card">
-                                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                                            </div>
-                                            <div class="st-card">
-                                                <p>
-                                                    <span>$450/Night</span>
-                                                    <a href="">BOOK NOW</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <a href="">
-                                            <div class="img-room" style="background-image: url(/img/a2.jpg);">
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="container-card-room hide-card">
-                                    <div class="card-bd-d">
-                                        <a href="">
-                                            <div class="img-room" style="background-image: url(/img/a2.jpg);">
-                                            </div>
-                                        </a>
-                                        <div class="content-card">
-                                            <div class="name-card">
-                                                Suite Room
-                                            </div>
-                                            <div class="des-card">
-                                                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                                            </div>
-                                            <div class="st-card">
-                                                <p>
-                                                    <span>$450/Night</span>
-                                                    <a href="">BOOK NOW</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @for (int i = 0; i < Model.Item2.Count(); i++)
+			{
+				if ((i % 2) != 1)
+				{
+					<div class="col-lg-4">
+						<div class="container-card-room hide-card">
+							<div class="card-bd-d">
+								<div class="content-card">
+									<div class="name-card">
+										@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Type.Name)
+									</div>
+									<div class="des-card">
+										<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+									</div>
+									<div class="st-card">
+										<p>
+											<span>$@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Type.Price)/Night</span>
+											@Html.ActionLink("BOOK NOW", "Detail", new { id = Model.Item2.ElementAt(i).Id })
+										</p>
+									</div>
+								</div>
+								<a href="">
+									<div class="img-room" style="background-image: url(@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Roomimgs.FirstOrDefault().Link));">
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+				}
+				else
+				{
+					<div class="col-lg-4">
+						<div class="container-card-room hide-card">
+							<div class="card-bd-d">
+								<a href="">
+									<div class="img-room" style="background-image: url(@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Roomimgs.FirstOrDefault().Link));">
+									</div>
+								</a>
+								<div class="content-card">
+									<div class="name-card">
+										@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Type.Name)
+									</div>
+									<div class="des-card">
+										<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+									</div>
+									<div class="st-card">
+										<p>
+											<span>$@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Type.Price)/Night</span>
+                                            @Html.ActionLink("BOOK NOW", "Detail", new { id = Model.Item2.ElementAt(i).Id })
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+                }
                         </div>
                     </div>
                 </div>
@@ -445,7 +475,7 @@
                             </div>
                             <div class="pri-r">
                                 <label>
-                                    From <strong> $399</strong>/night
+                                    From <strong> $@Html.DisplayFor(m => m.Item1.Type.Price)</strong>/night
                                 </label>
                             </div>
                         </div>
@@ -457,7 +487,7 @@
                     <div class="cost-tt row">
                         <div class="cost-tt-n">
                             <div class="cost-tt-n-l">Total Cost:</div>
-                            <div class="pr-r">$399</div>
+                            <div class="pr-r">$@Html.DisplayFor(m => m.Item1.Type.Price)</div>
                         </div>
                         <button class="bk-y-st">
                             Book your stay now

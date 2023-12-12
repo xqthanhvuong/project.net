@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<webhotel.Models.Room>
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
 <div class="container-bn">
@@ -183,7 +183,7 @@
                 At Ciao Hotel, we redefine the art of hospitality, offering a sublime blend of luxury, comfort, and personalized service. Nestled in the heart of Quy Nhon City, our hotel is a haven for those seeking a unique and memorable stay.
             </div>
             <div class="bn-ab-btn">
-                <a href="./room.html">BOOK YOUR ROOM NOW</a>
+                @Html.ActionLink("BOOK YOUR ROOM NOW", "Index", "Rooms")
             </div>
         </div>
     </div>
@@ -578,7 +578,7 @@
                 <div class="header-find-best">Find Best hotel for leaving</div>
                 Find the Best Hotel in Your Next Vacation
             </div>
-            <a href="./room.html" class="ds-hd hide-ds">BOOK NOOW</a>
+            @Html.ActionLink("BOOK NOW", "Index", "Rooms")
         </div>
     </div>
 </div>
@@ -605,7 +605,7 @@
                         <div class="st-card">
                             <p>
                                 <span>$@Html.DisplayFor(modelItem => item.Type.Price)/Night</span>
-                                <a href="./room.html">BOOK NOW</a>
+                                @Html.ActionLink("BOOK NOW", "Detail", "Rooms", new { id = item.Id }, null)
                             </p>
                         </div>
                     </div>
