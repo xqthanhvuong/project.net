@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<webhotel.Models.Room>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -587,7 +589,36 @@
         <div class="ft-home-name">Featured Rooms</div>
     </div>
     <div class="row">
+    @foreach (var item in Model) {
         <div class="col-lg-4">
+            <div class="container-card-room hide-card">
+                <div class="card-bd-d">
+                    <div class="content-card">
+                        <div class="name-card">
+                            @Html.DisplayFor(modelItem => item.Type.Name)
+                        </div>
+                        <div class="des-card">
+                            <p>
+                                @Html.DisplayFor(modelItem => item.Type.Des)
+                            </p>
+                        </div>
+                        <div class="st-card">
+                            <p>
+                                <span>$@Html.DisplayFor(modelItem => item.Type.Price)/Night</span>
+                                <a href="./room.html">BOOK NOW</a>
+                            </p>
+                        </div>
+                    </div>
+                    <a href="">
+                        <div class="img-room"
+                                 style="background-image: url(@Html.DisplayFor(modelItem => item.Roomimgs.FirstOrDefault().Link)">
+                         </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+        <!-- <div class="col-lg-4">
             <div class="container-card-room hide-card">
                 <div class="card-bd-d">
                     <div class="content-card">
@@ -664,7 +695,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 
