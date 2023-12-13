@@ -9,18 +9,18 @@
 			</div>
 		</div>
 		<div class="container bk-container" style="background-color: #222222; z-index: 10;">
-			<form action="" class="booking-form">
+			<form asp-action="Check" class="booking-form" method = "POST">
 				<div class="row booking-row">
 					<div class="col-lg-3 booking-d">
 						<span>check in</span><div>
 							<i class="fa-solid fa-calendar-days"></i>
-							<input type="text" name="" id="" placeholder="date-check-in" pattern="\d{2}/\d{2}/\d{4}" onfocus="this.type='date'" onblur="this.type='text'">
+							<input type="datetime-local" name="" id="" placeholder="date-check-in" pattern="\d{2}/\d{2}/\d{4}">
 						</div>
 					</div>
 					<div class="col-lg-3 booking-d">
 						<span>check out</span><div>
 							<i class="fa-solid fa-calendar-days"></i>
-							<input type="text" name="" id="" placeholder="date-check-out    " pattern="\d{2}/\d{2}/\d{4}" onfocus="this.type='date'" onblur="this.type='text'">
+							<input type="datetime-local" name="" id="" placeholder="date-check-out    " pattern="\d{2}/\d{2}/\d{4}">
 						</div>
 					</div>
 					<div class="col-lg-2 booking-d">
@@ -44,7 +44,11 @@
 							<option value="">5 Person</option>
 						</select>
 					</div>
-					<div class="col-lg-2 booking-d"><a href=""><span>Check</span><span>Availability</span></a></div>
+					<div class="col-lg-2 booking-d">
+						<button type="submit" style="background: none; display: flex; flex-direction: column; justify-align: center; color: white; border: none; font-size: 20px; font-family: 'Old Standard TT, serif';">
+							<span style="text-align:center; width: 100%">Check</span><span style="text-align:center; width: 100%">Availability</span>
+						</button>
+					</div>
 				</div>
 			</form>
 		</div>
@@ -62,10 +66,14 @@
 								if (i == 0)
 								{
 									<input type="radio" checked class="ck" name="radio-btn" id="rdo1" />
+									<label for="rdo1"
+							   class="mn-bt-nvg"
+							   style="background-color: #fff"></label>
 								}
 								else
 								{
 									<input type="radio" class="ck" name="radio-btn" id="@Html.DisplayFor(e => i + 1)" />
+									<label for="@Html.DisplayFor(e => i + 1)" class="mn-bt-nvg"></label>
 								}
 							}
 							@for (int i = 0; i < Model.Item1.Roomimgs.Count(); i++)
@@ -76,20 +84,19 @@
 							}
 						}
 					</div>
+					<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lấy ngày và giờ hiện tại
+            var currentDate = new Date();
 
-					<div class="nvg-mn">
-						<label for="rdo1"
-							   class="mn-bt-nvg"
-							   style="background-color: #fff"></label>
-						<label for="rdo2" class="mn-bt-nvg"></label>
-						<label for="rdo3" class="mn-bt-nvg"></label>
-						<label for="rdo4" class="mn-bt-nvg"></label>
-						<label for="rdo5" class="mn-bt-nvg"></label>
-						<label for="rdo6" class="mn-bt-nvg"></label>
-						<label for="rdo7" class="mn-bt-nvg"></label>
+            // Chuyển định dạng ngày và giờ thành chuỗi để đặt giá trị cho input
+            var currentDateString = currentDate.toISOString().slice(0, 16);
 
-
-					</div>
+            // Đặt giá trị mặc định cho input
+            document.getElementById("ci").value = currentDateString;
+            document.getElementById("co").value = currentDateString;
+        });
+    </script>
 				</div>
 				<div class="r-ct-dt">
 					<div class="r-n-dt">
