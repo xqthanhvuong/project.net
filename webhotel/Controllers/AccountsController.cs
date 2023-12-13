@@ -9,6 +9,7 @@ using webhotel.Models;
 
 namespace webhotel.Controllers
 {
+    
     public class AccountsController : Controller
     {
         private readonly WebhotelContext _context;
