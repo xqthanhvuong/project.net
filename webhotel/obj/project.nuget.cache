@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FrrL+NCtNagOvXprapc1ubC1A2eweqZ8Xe4xPqKy1en0NYb1+bsuoEJDGt9iB/NRHzKTX5+nRefIqY8WR/tecg==",
+  "dgSpecHash": "jlkA1xfUtaB5i4sVxz7xzaytWEzc0qetJvjRSA35Zg7GGPGgU0zzy91tlh9rlwIoy9ZUgYbFX2zPKhPr7QkhwA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\lexua\\source\\repos\\project.net\\webhotel\\webhotel.csproj",
+  "projectFilePath": "C:\\Users\\lexua\\Source\\Repos\\project.net\\webhotel\\webhotel.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lexua\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\lexua\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",

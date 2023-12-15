@@ -15,6 +15,10 @@ public partial class Reservation
 
     public int? RoomId { get; set; }
 
+    public string? CitizenId { get; set; }
+
+    public string? Phone { get; set; }
+
     public virtual Customer? Customer { get; set; }
 
     public virtual Room? Room { get; set; }

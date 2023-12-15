@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lexua\\source\\repos\\project.net\\webhotel\\webhotel.csproj": {}
+    "C:\\Users\\lexua\\Source\\Repos\\project.net\\webhotel\\webhotel.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lexua\\source\\repos\\project.net\\webhotel\\webhotel.csproj": {
+    "C:\\Users\\lexua\\Source\\Repos\\project.net\\webhotel\\webhotel.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lexua\\source\\repos\\project.net\\webhotel\\webhotel.csproj",
+        "projectUniqueName": "C:\\Users\\lexua\\Source\\Repos\\project.net\\webhotel\\webhotel.csproj",
         "projectName": "webhotel",
-        "projectPath": "C:\\Users\\lexua\\source\\repos\\project.net\\webhotel\\webhotel.csproj",
+        "projectPath": "C:\\Users\\lexua\\Source\\Repos\\project.net\\webhotel\\webhotel.csproj",
         "packagesPath": "C:\\Users\\lexua\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lexua\\source\\repos\\project.net\\webhotel\\obj\\",
+        "outputPath": "C:\\Users\\lexua\\Source\\Repos\\project.net\\webhotel\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\lexua\\AppData\\Roaming\\NuGet\\NuGet.Config",

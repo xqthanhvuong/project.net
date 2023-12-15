@@ -28,13 +28,14 @@ public partial class WebhotelContext : DbContext
     public virtual DbSet<Type> Types { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=LENOVO;Database=WEBHOTEL;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Username).HasName("PK__ACCOUNT__536C85E535657CE3");
+            entity.HasKey(e => e.Username).HasName("PK__ACCOUNT__536C85E55738150C");
 
             entity.ToTable("ACCOUNT");
 
@@ -51,7 +52,7 @@ public partial class WebhotelContext : DbContext
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__CUSTOMER__3214EC27CCCE7CC8");
+            entity.HasKey(e => e.Id).HasName("PK__CUSTOMER__3214EC27DAF1A8F2");
 
             entity.ToTable("CUSTOMER");
 
@@ -66,17 +67,22 @@ public partial class WebhotelContext : DbContext
 
         modelBuilder.Entity<Reservation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__RESERVAT__3214EC2726D6641C");
+            entity.HasKey(e => e.Id).HasName("PK__RESERVAT__3214EC27EEF1B8FD");
 
             entity.ToTable("RESERVATION");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.CheckIn).HasColumnType("date");
             entity.Property(e => e.CheckOut).HasColumnType("date");
+            entity.Property(e => e.CitizenId)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("CitizenID");
             entity.Property(e => e.CustomerId)
                 .HasMaxLength(15)
                 .IsUnicode(false)
                 .HasColumnName("CustomerID");
+            entity.Property(e => e.Phone).HasMaxLength(10);
             entity.Property(e => e.RoomId).HasColumnName("RoomID");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Reservations)
@@ -90,7 +96,7 @@ public partial class WebhotelContext : DbContext
 
         modelBuilder.Entity<Room>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ROOM__3214EC27E0CA7C6B");
+            entity.HasKey(e => e.Id).HasName("PK__ROOM__3214EC27F7DC9009");
 
             entity.ToTable("ROOM");
 
@@ -104,7 +110,7 @@ public partial class WebhotelContext : DbContext
 
         modelBuilder.Entity<Roomimg>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ROOMIMG__3214EC278AA6D950");
+            entity.HasKey(e => e.Id).HasName("PK__ROOMIMG__3214EC275144FC18");
 
             entity.ToTable("ROOMIMG");
 
@@ -119,7 +125,7 @@ public partial class WebhotelContext : DbContext
 
         modelBuilder.Entity<Type>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TYPE__3214EC279A49E363");
+            entity.HasKey(e => e.Id).HasName("PK__TYPE__3214EC277A8A4939");
 
             entity.ToTable("TYPE");
 

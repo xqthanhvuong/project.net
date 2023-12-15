@@ -1,71 +1,131 @@
-﻿<main>
-    <div class="bn-room" style="background-image: url(./img/ck.jpg);">
-        <div class="bn-room-content">
-            <span><a href="./index.html">Home></a>Checkout></span>
-            <div class="name">Checkout</div>
-        </div>
-    </div>
-    <div class="container c-ctn">
-        <div class="row">
-            <div class="col-6 bl-dt-ct">
-                <div class="bl-dt">
-                    Billing details
-                </div>
-                <label for="name">Name</label>
-                <input type="text" id="name">
-                <label for="country">Country / Region</label>
-                <input type="text" name="" id="country">
-                <label for="street">Street address</label>
-                <input type="text" id="street">
-                <label for="city">Town / City</label>
-                <input type="text" id="city">
-                <label for="email">Email</label>
-                <input type="text" id="email">
-            </div>
-            <div class="col-6 bl-co-ct">
-                <div class="row">
-                    <div class="bl-dt">Your order</div>
-                    <div class="row justify-content-between">
-                        <div class="dt-l-co">PRODUCT</div>
-                        <div class="dt-r-co">	SUBTOTAL</div>
-                    </div>
-                    <div class="row justify-content-between">
-                        <div class="dt-l-co">
-                            <div>
-                                Signature Suite  <strong>
-                                    × 1
-                                </strong>
-                            </div>
-                            <div>
-                                <strong>
-                                    Date:
-                                </strong>2023-12-06 - 2023-12-07
-                            </div>
-                            <div>
-                                <strong>
-                                    Details:
-                                </strong>
-                                Rooms: 1, Adults: 1
-                            </div>
+﻿@model Tuple<Room, Customer, string, string, string, string>
 
-                        </div>
-                        <div class="dt-r-co">$399.00</div>
-                    </div>
-                    <div class="row justify-content-between">
-                        <div class="dt-l-co">Subtotal</div>
-                        <div class="dt-r-co"> <strong>$399.00</strong></div>
-                    </div>
-                    <div class="row justify-content-between">
-                        <div class="dt-l-co">Total</div>
-                        <div class="dt-r-co"><strong>$399.00</strong></div>
-                        <button>
-                            Place order
-                        </button>
-                    </div>
+@{
+	ViewData["Title"] = "CheckOut";
+}
 
-                </div>
-            </div>
-        </div>
-    </div>
+<main>
+	<div class="bn-room" style="background-image: url(./img/ck.jpg);">
+		<div class="bn-room-content">
+			<span><a href="./index.html">Home></a>Checkout></span>
+			<div class="name">Checkout</div>
+		</div>
+	</div>
+	<form class="container c-ctn" asp-action="CheckOut" id="checkoutForm" method="POST">
+		<div class="row">
+			<div class="col-6 bl-dt-ct">
+				<div class="bl-dt">
+					Billing details
+				</div>
+				<label for="name">Name</label>
+				<input type="text" id="name" name="name" value="@Html.DisplayFor(r => Model.Item2.Name)">
+				<label for="address">Địa chỉ</label>
+				<input type="text" name="address" id="address" value="@Html.DisplayFor(r => Model.Item2.Name)">
+				<label for="phone">Số điện thoại</label>
+				<input type="text" id="phone" name="phone" value="" require>
+				<label for="email">Email</label>
+				<input type="text" id="email" name="email" value="@Html.DisplayFor(r => Model.Item2.Email)">
+				<label for="citizenID">Căn cước công dân</label>
+				<input type="text" id="citizenID" value="" name="citizenID" require>
+				<input type="text" id="" name="roomID" hidden value="@Html.DisplayFor(r => Model.Item1.Id)">
+				<input type="text" id="" name="checkIn" hidden value="@Html.DisplayFor(r => Model.Item3)">
+				<input type="text" id="" name="checkOut" hidden value="@Html.DisplayFor(r => Model.Item4)">
+			</div>
+			@if (Model != null &&
+					Model.Item1 != null &&
+					Model.Item2 != null &&
+					Model.Item3 != null &&
+					Model.Item4 != null &&
+					Model.Item5 != null &&
+					Model.Item6 != null
+					)
+			{
 
+				<div class="col-6 bl-co-ct">
+					<div class="row">
+						<div class="bl-dt">Your order</div>
+						<div class="row justify-content-between">
+							<div class="dt-l-co">PRODUCT</div>
+							<div class="dt-r-co">	SUBTOTAL</div>
+						</div>
+						<div class="row justify-content-between">
+							<div class="dt-l-co">
+								<div>
+									@Model.Item1.Type.Name <strong>
+										× 1
+									</strong>
+								</div>
+								<div>
+									<strong>
+										Date:
+									</strong>@Model.Item3 - @Model.Item4
+								</div>
+								<div>
+									<strong>
+										Details:
+									</strong>
+									Rooms: @Model.Item5, Persons: @Model.Item6
+								</div>
+
+							</div>
+							<div class="dt-r-co">$@ViewBag.CalculatedValue</div>
+						</div>
+						<div class="row justify-content-between">
+							<div class="dt-l-co">Subtotal</div>
+							<div class="dt-r-co"> <strong>$@ViewBag.CalculatedValue</strong></div>
+						</div>
+						<div class="row justify-content-between">
+							<div class="dt-l-co">Total</div>
+							<div class="dt-r-co"><strong>$@ViewBag.CalculatedValue</strong></div>
+							<button type="submit" id="submitButton">
+								Place order
+							</button>
+						</div>
+
+					</div>
+				</div>
+			}
+		</div>
+	</form>
+	<script>
+				document.addEventListener("DOMContentLoaded", function () {
+					var form = document.getElementById("checkoutForm");
+					var submitButton = document.getElementById("submitButton");
+
+					form.addEventListener("submit", function (event) {
+						event.preventDefault();
+						if (validatePhoneNumber(document.getElementById("phone").value) == false) {
+							alert("Số điện thoại không hợp lệ");
+							return;
+						}
+						if (validateCitizenID(document.getElementById("citizenID").value) == false) {
+							alert("Căn cước công dân không hợp lệ");
+							return;
+						}
+						if (validateForm()) {
+							form.submit();
+						}
+					});
+					function validateCitizenID(citizenID) {
+						var regex = /^\d{12}$/;
+						return regex.test(citizenID);
+					}
+					function validatePhoneNumber(phoneNumber) {
+						var regex = /^(\+84|0)([2-9]\d{8})$/;
+						return regex.test(phoneNumber);
+					}
+
+					function validateForm() {
+						var name = document.getElementById("name").value;
+						var address = document.getElementById("address").value;
+						var phone = document.getElementById("phone").value;
+						var email = document.getElementById("email").value;
+						var citizenID = document.getElementById("citizenID").value;
+						if (name.trim() === "" || address.trim() === "" || phone.trim() === "" || email.trim() === "" || citizenID.trim() === "") {
+							return false;
+						}
+						return true;
+					}
+				});
+			</script>
 </main>

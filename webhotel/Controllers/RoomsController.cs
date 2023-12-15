@@ -4,17 +4,12 @@ using webhotel.Models;
 
 namespace webhotel.Controllers
 {
-	public class RoomViewModel
-	{
-		public IQueryable RoomDetail { get; set; }
-		public IEnumerable<Room> RoomOthers { get; set; }
-	}
 	public class RoomsController : Controller
 	{
 
 		private readonly WebhotelContext _context;
 
-		public RoomsController(ILogger<RoomsController> logger)
+		public RoomsController()
 		{
 			_context = new WebhotelContext();
 		}
@@ -29,7 +24,7 @@ namespace webhotel.Controllers
 		public IActionResult Detail(int? id)
 		{
 			var roomsDetail = _context.Rooms.Include(r => r.Roomimgs).Include(r => r.Type).Where(r => r.Id == id).FirstOrDefault();
-			var roomOther = _context.Rooms.Include(r => r.Roomimgs).Include(r => r.Type).Take(2).ToList();
+			var roomOther = _context.Rooms.Include(r => r.Roomimgs).Include(r => r.Type).ToList();
 			var rs = Tuple.Create(roomsDetail, roomOther);
 
 			return View(rs);
@@ -58,6 +53,22 @@ namespace webhotel.Controllers
 				ViewBag.Message = "Hết phòng";
 				return RedirectToAction("Index", "Rooms");
 			}
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[ActionName("Book")]
+		public IActionResult Book(int roomID, string ciF, string coF, string quantityRoom, string quantityPerson)
+		{
+			string id = "C001";
+			TempData["CustomerID"] = id;
+			TempData["RoomID"] = roomID;
+			TempData["CheckIn"] = ciF;
+			TempData["CheckOut"] = coF;
+			TempData["QuantityRoom"] = quantityRoom;
+			TempData["QuantityPerson"] = quantityPerson;
+
+			return RedirectToAction("Index", "Checkout");
 		}
 	}
 }
