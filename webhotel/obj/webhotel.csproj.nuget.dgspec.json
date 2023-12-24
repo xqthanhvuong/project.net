@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HP\\Desktop\\Webhotel\\webhotel\\webhotel.csproj": {}
+    "C:\\Users\\HP\\Desktop\\New folder (4)\\webhotel\\webhotel.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HP\\Desktop\\Webhotel\\webhotel\\webhotel.csproj": {
+    "C:\\Users\\HP\\Desktop\\New folder (4)\\webhotel\\webhotel.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HP\\Desktop\\Webhotel\\webhotel\\webhotel.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Desktop\\New folder (4)\\webhotel\\webhotel.csproj",
         "projectName": "webhotel",
-        "projectPath": "C:\\Users\\HP\\Desktop\\Webhotel\\webhotel\\webhotel.csproj",
+        "projectPath": "C:\\Users\\HP\\Desktop\\New folder (4)\\webhotel\\webhotel.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HP\\Desktop\\Webhotel\\webhotel\\obj\\",
+        "outputPath": "C:\\Users\\HP\\Desktop\\New folder (4)\\webhotel\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -44,6 +44,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "MailKit": {
+              "target": "Package",
+              "version": "[3.6.0, )"
+            },
             "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation": {
               "target": "Package",
               "version": "[6.0.25, )"
@@ -69,6 +73,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[6.0.16, )"
+            },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[3.6.0, )"
             }
           },
           "imports": [
