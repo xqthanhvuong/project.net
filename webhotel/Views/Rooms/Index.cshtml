@@ -16,7 +16,7 @@
 			<div class="name">Cozzy Rooms</div>
 		</div>
 		<div class="container bk-container" style="background-color: #222222; z-index: 10;">
-			<form asp-action="Check" class="booking-form" method="POST">
+			<form asp-action="Check" class="booking-form" method="POST" id="formC">
 				<div class="row booking-row">
 					<div class="col-lg-3 booking-d">
 						<span>check in</span><div>
@@ -52,6 +52,18 @@
 											}
 										}
 									});
+									const formC = document.getElementById("formC");
+									const quantity = document.getElementById("quantity");
+									formC.addEventListener("submit", function (event) {
+										if (!ci.value || !co.value ) {
+											event.preventDefault();
+											alert("Please choose check in and check out date");
+										}
+										if (quantity.value < 1) {
+											event.preventDefault();
+											alert("Please choose quantity");
+										}
+									});
 								});
 
 							</script>
@@ -80,7 +92,7 @@
 					</div>
 					<div class="col-lg-2 booking-d">
 						<span>Quantity</span>
-						<input name="quantity" placeholder="Quantity" type="number" />
+						<input name="quantity" placeholder="Quantity" type="number" id="quantity" />
 					</div>
 					<div class="col-lg-2 booking-d">
 						<button type="submit" style="background: none; display: flex; flex-direction: column; justify-align: center; color: white; border: none; font-size: 22px; font-family: 'Old Standard TT, serif';">

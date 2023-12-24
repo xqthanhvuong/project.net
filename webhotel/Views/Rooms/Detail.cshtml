@@ -18,7 +18,7 @@
 			</div>
 		</div>
 		<div class="container bk-container" style="background-color: #222222; z-index: 10;">
-			<form asp-action="Check" class="booking-form" method="POST">
+			<form asp-action="Check" class="booking-form" method="POST" id="formC">
 				<div class="row booking-row">
 					<div class="col-lg-3 booking-d">
 						<span>check in</span><div>
@@ -34,6 +34,7 @@
 					</div>
 					<script>
 						document.addEventListener("DOMContentLoaded", function () {
+							
 							flatpickr("#ci", { minDate: "today" });
 
 							const co = document.getElementById("co");
@@ -60,6 +61,19 @@
 									}
 								}
 							});
+							const formC = document.getElementById("formC");
+							const quantity = document.getElementById("quantity");
+							formC.addEventListener("submit", function (event) {
+								if (!ci.value || !co.value) {
+									event.preventDefault();
+									alert("Please choose check in and check out date");
+								}
+								if(!quantity.value)
+								{
+									event.preventDefault();
+									alert("Please choose quantity");
+								}
+							});
 						});
 					</script>
 					<div class="col-lg-2 booking-d">
@@ -79,7 +93,7 @@
 					</div>
 					<div class="col-lg-2 booking-d">
 						<span>Quantity</span>
-						<input name="quantity" placeholder="Quantity" type="number" />
+						<input name="quantity" placeholder="Quantity" type="number" id="quantity" />
 					</div>
 					<div class="col-lg-2 booking-d">
 						<button type="submit" style="background: none; display: flex; flex-direction: column; justify-align: center; color: white; border: none; font-size: 20px; font-family: 'Old Standard TT, serif';">
@@ -494,7 +508,7 @@
 							SWIMMING POOL
 						</div>
 					</div>
-					<form asp-action="index" asp-controller="Checkout" method="POST">
+					<form asp-action="index" asp-controller="Checkout" method="POST" id="formA">
 						<div class="bk-ctn row" style="padding: 0 13px">
 							<div class="rsv-n">
 								<div class="rsv-n-l">
@@ -595,6 +609,27 @@
 				}
 				caculate();
 			});
+			const formA = document.getElementById("formA");
+			formA.addEventListener("submit", function (event) {
+				if (quantityRoom.value < 1) {
+					alert("Quanity must be greater than 0");
+					quantityRoom.value = 1;
+					event.preventDefault();
+				}
+				if (quantityPerson.value < 1) {
+					alert("Quanity must be greater than 0");
+					quantityPerson.value = 1;
+					event.preventDefault();
+				}
+				if (!ciF.value) {
+					alert("Please choose checkin date");
+					event.preventDefault();
+				}
+				if (!coF.value) {
+					alert("Please choose checkout date");
+					event.preventDefault();
+				}
+			});
 			function caculate() {
 				var checkinDate = new Date(document.getElementById("ciF").value);
 				console.log(checkinDate);
@@ -612,9 +647,7 @@
 				}
 				if (quantityRoom.value) {
 					totalPrice.innerHTML = "$" + quantityRoom.value * @Html.DisplayFor(m => m.Item1.Price)* daysDifference;
-
 				}
-
 			}
 		});
 	</script>
