@@ -72,3 +72,27 @@ if (fthome != null) {
           }
         });
 }
+
+var triggerTabList = [].slice.call(document.querySelectorAll('#ex1 a'))
+if (triggerTabList != null) {
+
+triggerTabList.forEach(function (triggerEl) {
+    var tabTrigger = new bootstrap.Tab(triggerEl)
+
+    triggerEl.addEventListener('click', function (event) {
+        event.preventDefault()
+        tabTrigger.show()
+    })
+})
+}
+function expandBox(boxId, tabId) {
+    var box = document.getElementById(boxId);
+    var tab = document.getElementById(tabId);
+
+    // ??t chi?u r?ng c?a box theo tab t??ng ?ng
+    if (tabId === 'pills-login') {
+        box.style.width = '400px';
+    } else if (tabId === 'pills-register') {
+        box.style.width = '700px';
+    }
+}

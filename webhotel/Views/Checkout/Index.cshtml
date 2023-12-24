@@ -1,84 +1,79 @@
-﻿@model Tuple<Room, Customer, string, string, string, string>
-
+﻿@model Tuple<Roomtype,string,string,string,string>;
 @{
-	ViewData["Title"] = "CheckOut";
+	ViewData["title"] = "checkout";
 }
 
 <main>
 	<div class="bn-room" style="background-image: url(./img/ck.jpg);">
 		<div class="bn-room-content">
-			<span><a href="./index.html">Home></a>Checkout></span>
-			<div class="name">Checkout</div>
+			<span><a href="./index.html">home></a>checkout></span>
+			<div class="name">checkout</div>
 		</div>
 	</div>
-	<form class="container c-ctn" asp-action="CheckOut" id="checkoutForm" method="POST">
+	<form class="container c-ctn" asp-action="checkout" id="checkoutform" method="post">
 		<div class="row">
 			<div class="col-6 bl-dt-ct">
 				<div class="bl-dt">
-					Billing details
+					billing details
 				</div>
-				<label for="name">Name</label>
-				<input type="text" id="name" name="name" value="@Html.DisplayFor(r => Model.Item2.Name)">
-				<label for="address">Địa chỉ</label>
-				<input type="text" name="address" id="address" value="@Html.DisplayFor(r => Model.Item2.Name)">
-				<label for="phone">Số điện thoại</label>
-				<input type="text" id="phone" name="phone" value="" require>
-				<label for="email">Email</label>
-				<input type="text" id="email" name="email" value="@Html.DisplayFor(r => Model.Item2.Email)">
-				<label for="citizenID">Căn cước công dân</label>
-				<input type="text" id="citizenID" value="" name="citizenID" require>
-				<input type="text" id="" name="roomID" hidden value="@Html.DisplayFor(r => Model.Item1.Id)">
-				<input type="text" id="" name="checkIn" hidden value="@Html.DisplayFor(r => Model.Item3)">
-				<input type="text" id="" name="checkOut" hidden value="@Html.DisplayFor(r => Model.Item4)">
+				<label for="name">name</label>
+				<input type="text" id="name" name="name" required>
+				<label for="address">địa chỉ</label>
+				<input type="text" name="address" id="address">
+				<label for="phone">số điện thoại</label>
+				<input type="text" id="phone" name="phone" require>
+				<label for="email">email</label>
+				<input type="text" id="email" name="email" required>
+				<label for="citizenid">căn cước công dân</label>
+				<input type="text" id="citizenid" value="" name="citizenid" require>
+				<input type="text" value="@Model.Item1.Id" name="roomid" hidden>
+				<input type="text" value="@Model.Item2" name="checkin" hidden>
+				<input type="text" value="@Model.Item3" name="checkout" hidden>
+				<input type="text" value="@Model.Item4" name="quantity" hidden>
+
 			</div>
-			@if (Model != null &&
-					Model.Item1 != null &&
-					Model.Item2 != null &&
-					Model.Item3 != null &&
-					Model.Item4 != null &&
-					Model.Item5 != null &&
-					Model.Item6 != null
-					)
-			{
+
+			@{
 
 				<div class="col-6 bl-co-ct">
 					<div class="row">
-						<div class="bl-dt">Your order</div>
+						<div class="bl-dt">your order</div>
 						<div class="row justify-content-between">
-							<div class="dt-l-co">PRODUCT</div>
-							<div class="dt-r-co">	SUBTOTAL</div>
+							<div class="dt-l-co">product</div>
+							<div class="dt-r-co">	subtotal</div>
 						</div>
 						<div class="row justify-content-between">
 							<div class="dt-l-co">
 								<div>
-									@Model.Item1.Type.Name <strong>
-										× 1
+									@Model.Item1.Name
+									<strong>
+										x @Model.Item4
 									</strong>
 								</div>
 								<div>
 									<strong>
-										Date:
-									</strong>@Model.Item3 - @Model.Item4
+										date:@Model.Item2 - @Model.Item3
+									</strong>
 								</div>
 								<div>
 									<strong>
-										Details:
+										details:
 									</strong>
-									Rooms: @Model.Item5, Persons: @Model.Item6
+									rooms: @Model.Item4 , Adults: @Model.Item5
 								</div>
 
 							</div>
-							<div class="dt-r-co">$@ViewBag.CalculatedValue</div>
+							<div class="dt-r-co">@ViewBag.CalculatedValue</div>
 						</div>
 						<div class="row justify-content-between">
-							<div class="dt-l-co">Subtotal</div>
-							<div class="dt-r-co"> <strong>$@ViewBag.CalculatedValue</strong></div>
+							<div class="dt-l-co">subtotal</div>
+							<div class="dt-r-co"> <strong>@ViewBag.CalculatedValue</strong></div>
 						</div>
 						<div class="row justify-content-between">
 							<div class="dt-l-co">Total</div>
-							<div class="dt-r-co"><strong>$@ViewBag.CalculatedValue</strong></div>
-							<button type="submit" id="submitButton">
-								Place order
+							<div class="dt-r-co"><strong>@ViewBag.CalculatedValue</strong></div>
+							<button type="submit" id="submitbutton">
+								place order
 							</button>
 						</div>
 
@@ -88,44 +83,44 @@
 		</div>
 	</form>
 	<script>
-				document.addEventListener("DOMContentLoaded", function () {
-					var form = document.getElementById("checkoutForm");
-					var submitButton = document.getElementById("submitButton");
+		document.addeventlistener("domcontentloaded", function () {
+			var form = document.getelementbyid("checkoutform");
+			var submitbutton = document.getelementbyid("submitbutton");
 
-					form.addEventListener("submit", function (event) {
-						event.preventDefault();
-						if (validatePhoneNumber(document.getElementById("phone").value) == false) {
-							alert("Số điện thoại không hợp lệ");
-							return;
-						}
-						if (validateCitizenID(document.getElementById("citizenID").value) == false) {
-							alert("Căn cước công dân không hợp lệ");
-							return;
-						}
-						if (validateForm()) {
-							form.submit();
-						}
-					});
-					function validateCitizenID(citizenID) {
-						var regex = /^\d{12}$/;
-						return regex.test(citizenID);
-					}
-					function validatePhoneNumber(phoneNumber) {
-						var regex = /^(\+84|0)([2-9]\d{8})$/;
-						return regex.test(phoneNumber);
-					}
+			form.addeventlistener("submit", function (event) {
+				event.preventdefault();
+				if (validatephonenumber(document.getelementbyid("phone").value) == false) {
+					alert("số điện thoại không hợp lệ");
+					return;
+				}
+				if (validatecitizenid(document.getelementbyid("citizenid").value) == false) {
+					alert("căn cước công dân không hợp lệ");
+					return;
+				}
+				if (validateform()) {
+					form.submit();
+				}
+			});
+			function validatecitizenid(citizenid) {
+				var regex = /^\d{12}$/;
+				return regex.test(citizenid);
+			}
+			function validatephonenumber(phonenumber) {
+				var regex = /^(\+84|0)([2-9]\d{8})$/;
+				return regex.test(phonenumber);
+			}
 
-					function validateForm() {
-						var name = document.getElementById("name").value;
-						var address = document.getElementById("address").value;
-						var phone = document.getElementById("phone").value;
-						var email = document.getElementById("email").value;
-						var citizenID = document.getElementById("citizenID").value;
-						if (name.trim() === "" || address.trim() === "" || phone.trim() === "" || email.trim() === "" || citizenID.trim() === "") {
-							return false;
-						}
-						return true;
-					}
-				});
-			</script>
+			function validateform() {
+				var name = document.getelementbyid("name").value;
+				var address = document.getelementbyid("address").value;
+				var phone = document.getelementbyid("phone").value;
+				var email = document.getelementbyid("email").value;
+				var citizenid = document.getelementbyid("citizenid").value;
+				if (name.trim() === "" || address.trim() === "" || phone.trim() === "" || email.trim() === "" || citizenid.trim() === "") {
+					return false;
+				}
+				return true;
+			}
+		});
+	</script>
 </main>

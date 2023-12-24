@@ -1,15 +1,20 @@
-﻿@model Tuple<Room, List<Room>>
+﻿@model Tuple<Roomtype, List<Roomtype>, List<Roomimg>,int>
 
 @{
 	ViewData["Title"] = "Rooms - Detail";
 }
-
+@if (TempData["Message"] != null)
+{
+	<script>
+		alert("@TempData["Message"]");
+	</script>
+}
 <main>
 	<div class="bn-room" style="background-image: url(~/img/bg_3.jpg.webp);">
 		<div class="bn-room-content">
 			<span><a href="~/index.html">Home></a>Rooms></span>
 			<div class="name">
-				@Html.DisplayFor(m => m.Item1.Type.Name)
+				@Html.DisplayFor(m => m.Item1.Name)
 			</div>
 		</div>
 		<div class="container bk-container" style="background-color: #222222; z-index: 10;">
@@ -18,38 +23,63 @@
 					<div class="col-lg-3 booking-d">
 						<span>check in</span><div>
 							<i class="fa-solid fa-calendar-days"></i>
-							<input type="datetime-local" name="ci" id="ci" placeholder="date-check-in" pattern="\d{2}/\d{2}/\d{4}">
+							<input type="date" name="ci" id="ci" placeholder="date-check-in" pattern="\d{2}/\d{2}/\d{4}">
 						</div>
 					</div>
 					<div class="col-lg-3 booking-d">
 						<span>check out</span><div>
 							<i class="fa-solid fa-calendar-days"></i>
-							<input type="datetime-local" name="co" id="co" placeholder="date-check-out" pattern="\d{2}/\d{2}/\d{4}">
+							<input type="text" readonly name="co" id="co" placeholder="date-check-out" pattern="\d{2}/\d{2}/\d{4}">
 						</div>
 					</div>
+					<script>
+						document.addEventListener("DOMContentLoaded", function () {
+							flatpickr("#ci", { minDate: "today" });
+
+							const co = document.getElementById("co");
+							co.onclick = function (event) {
+								if (!ci.value) {
+									console.log(1);
+									ci.click();
+									return;
+								}
+							};
+							const ci = document.getElementById("ci");
+							ci.addEventListener("change", function () {
+								let min = ci.value;
+								if (min) {
+									co.type = 'date';
+									co.readOnly = false;
+									let minDate = new Date(min);
+									flatpickr("#co", { minDate: minDate });
+
+									if (min > co.value) {
+										co.value = null;
+										co.type = 'text';
+										co.readOnly = true;
+									}
+								}
+							});
+						});
+					</script>
 					<div class="col-lg-2 booking-d">
 						<span>Room</span>
 						<div>
-							<select name="" id="room-bk">
-								@if (Model != null && Model.Item2 != null)
+							<select name="t" id="room-bk">
+								<option value="">Room Type</option>
+								@if (Model != null)
 								{
 									@for (int i = 0; i < Model.Item2.Count(); i++)
 									{
-										<option value="@Html.DisplayFor(e => Model.Item2.ElementAt(i).Type.Name)">@Html.DisplayFor(e => Model.Item2.ElementAt(i).Type.Name)</option>
+										<option value="@Model.Item2.ElementAt(i).Id">@Html.DisplayFor(e => Model.Item2.ElementAt(i).Name)</option>
 									}
 								}
 							</select>
 						</div>
 					</div>
 					<div class="col-lg-2 booking-d">
-						<span>Guest</span>
-						<select name="">
-							<option value="">1 Person</option>
-							<option value="">2 Person</option>
-							<option value="">3 Person</option>
-							<option value="">4 Person</option>
-							<option value="">5 Person</option>
-						</select>
+						<span>Quantity</span>
+						<input name="quantity" placeholder="Quantity" type="number" />
 					</div>
 					<div class="col-lg-2 booking-d">
 						<button type="submit" style="background: none; display: flex; flex-direction: column; justify-align: center; color: white; border: none; font-size: 20px; font-family: 'Old Standard TT, serif';">
@@ -65,22 +95,18 @@
 		<div class="row  r-dt-l">
 			<div class="col-lg-8">
 				<div class="ctn-sld-a">
-					<div class="sld-s">
-						@if (Model != null && Model.Item1 != null && Model.Item1.Roomimgs != null)
-						{
+					@if (Model != null && Model.Item1 != null)
+					{
+						<div class="sld-s">
 							@for (int i = 0; i < Model.Item1.Roomimgs.Count(); i++)
 							{
 								if (i == 0)
 								{
 									<input type="radio" checked class="ck" name="radio-btn" id="rdo1" />
-									<label for="rdo1"
-										   class="mn-bt-nvg"
-										   style="background-color: #fff"></label>
 								}
 								else
 								{
-									<input type="radio" class="ck" name="radio-btn" id="@Html.DisplayFor(e => i + 1)" />
-									<label for="@Html.DisplayFor(e => i + 1)" class="mn-bt-nvg"></label>
+									<input type="radio" class="ck" name="radio-btn" id="rdo@(i+1)" />
 								}
 							}
 							@for (int i = 0; i < Model.Item1.Roomimgs.Count(); i++)
@@ -89,14 +115,32 @@
 									<img src="@Html.DisplayFor(x => Model.Item1.Roomimgs.ElementAt(i).Link)" />
 								</div>
 							}
-						}
-					</div>
+						</div>
+						<div class="nvg-mn">
+
+							@for (int i = 0; i < Model.Item1.Roomimgs.Count(); i++)
+							{
+								if (i == 0)
+								{
+									<label for="rdo1"
+										   class="mn-bt-nvg"
+										   style="background-color: #fff"></label>
+								}
+								else
+								{
+									<label for="rdo@(i+1)" class="mn-bt-nvg"></label>
+								}
+							}
+
+						</div>
+
+					}
 				</div>
 				<div class="r-ct-dt">
 					<div class="r-n-dt">
-						@Html.DisplayFor(m => m.Item1.Type.Name)
+						@Html.DisplayFor(m => m.Item1.Name)
 					</div>
-					<div class="r-de-dt">@Html.DisplayFor(m => m.Item1.Type.Des)</div>
+					<div class="r-de-dt">@Html.DisplayFor(m => m.Item1.Des)</div>
 				</div>
 				<div class="r-ft-dt">
 					<div class="r-ft-dt-c">
@@ -250,8 +294,8 @@
 						<div class="rlt-r-n">
 							Related Rooms
 						</div>
-						<div class="rlt-r-r row">
-							@if (Model != null && Model.Item1 != null && Model.Item1.Roomimgs != null)
+						<div class="rlt-r-r row " style="margin-bottom:100px;">
+							@if (Model != null && Model.Item1 != null)
 							{
 
 								@for (int i = 0; i < 2; i++)
@@ -263,14 +307,14 @@
 												<div class="card-bd-d">
 													<div class="content-card">
 														<div class="name-card">
-															@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Type.Name)
+															@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Name)
 														</div>
 														<div class="des-card">
-															<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+															<p>@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Sumary)</p>
 														</div>
 														<div class="st-card">
 															<p>
-																<span>$@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Type.Price)/Night</span>
+																<span>$@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Price)/Night</span>
 																@Html.ActionLink("BOOK NOW", "Detail", new { id = Model.Item2.ElementAt(i).Id })
 															</p>
 														</div>
@@ -294,14 +338,14 @@
 													</a>
 													<div class="content-card">
 														<div class="name-card">
-															@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Type.Name)
+															@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Name)
 														</div>
 														<div class="des-card">
-															<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+															<p>@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Sumary)</p>
 														</div>
 														<div class="st-card">
 															<p>
-																<span>$@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Type.Price)/Night</span>
+																<span>$@Html.DisplayFor(modelItem => Model.Item2.ElementAt(i).Price)/Night</span>
 																@Html.ActionLink("BOOK NOW", "Detail", new { id = Model.Item2.ElementAt(i).Id })
 															</p>
 														</div>
@@ -450,7 +494,7 @@
 							SWIMMING POOL
 						</div>
 					</div>
-					<form asp-action="Book" method="POST">
+					<form asp-action="index" asp-controller="Checkout" method="POST">
 						<div class="bk-ctn row" style="padding: 0 13px">
 							<div class="rsv-n">
 								<div class="rsv-n-l">
@@ -458,20 +502,20 @@
 								</div>
 								<div class="pri-r">
 									<label>
-										From <strong id="price"> $@Html.DisplayFor(m => m.Item1.Type.Price)</strong>/night
+										From <strong id="price"> $@Html.DisplayFor(m => m.Item1.Price)</strong>/night
 									</label>
 								</div>
 							</div>
 							<input type="text" id="roomId" name="roomID" value="@Html.DisplayFor(m => m.Item1.Id)" hidden>
-							<input type="datetime-local" placeholder="checkin" id="ciF" name="ciF">
-							<input type="datetime-local" placeholder="checkout" id="coF" name="coF">
-							<input type="number" placeholder="Số lượng phòng" min="1" max="10" id="quantity-room" name='quantityRoom'>
+							<input type="date" placeholder="checkin" id="ciF" name="ciF">
+							<input type="text" placeholder="checkout" readonly id="coF" name="coF">
+							<input type="number" placeholder="Số lượng phòng" min="1" max="@Model.Item4" id="quantity-room" name='quantityRoom'>
 							<input type="number" placeholder="Số lượng người" min="1" max="10" id="quantity-person" name='quantityPerson'>
 						</div>
 						<div class="cost-tt row" style="padding: 0 13px">
 							<div class="cost-tt-n">
 								<div class="cost-tt-n-l">Total Cost:</div>
-								<div class="pr-r" id="total-price">$@Html.DisplayFor(m => m.Item1.Type.Price)</div>
+								<div class="pr-r" id="total-price">$@Html.DisplayFor(m => m.Item1.Price)</div>
 							</div>
 						</div>
 						<button class="bk-y-st" style="width: 100%" type="submit">
@@ -509,66 +553,38 @@
 	</div>
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
-			const currentDate = new Date();
-			const nextDay = new Date();
-			nextDay.setDate(currentDate.getDate() + 1);
-
-			const currentDateString = currentDate.toISOString().slice(0, 16);
-			const nextDayString = nextDay.toISOString().slice(0, 16);
-
-			document.getElementById("ci").value = currentDateString;
-			document.getElementById("ciF").value = currentDateString;
-			document.getElementById("co").value = nextDayString;
-			document.getElementById("coF").value = nextDayString;
-
-			const co = document.getElementById("co");
+			flatpickr("#ciF", { minDate: "today" });
 			const coF = document.getElementById("coF");
-			const ci = document.getElementById("ci");
+			coF.onclick = function (event) {
+				if (!ciF.value) {
+					console.log(1);
+					ciF.click();
+					return;
+				}
+			};
+			coF.addEventListener("change", () => {
+				if (coF.value) {
+					caculate();
+				}
+			})
 			const ciF = document.getElementById("ciF");
-
-			co.addEventListener("change", function () {
-				if (ci.value > co.value) {
-					alert("Check out date must be after check in date");
-					const x = new Date(ci.value);
-					x.setDate(x.getDate() + 2);
-					co.value = x.toISOString().slice(0, 16);
-				}
-			});
-
-			coF.addEventListener("change", function () {
-				if (ciF.value > coF.value) {
-					alert("Check out date must be after check in date");
-					const x = new Date(ciF.value);
-					x.setDate(x.getDate() + 2);
-					coF.value = x.toISOString().slice(0, 16);
-				}
-			});
-
-			ci.addEventListener("change", function () {
-				if (ci.value < currentDateString) {
-					alert("Check in date must be after current date");
-					ci.value = currentDateString;
-				}
-				if (ci.value > co.value) {
-					alert("Check in date must be before check out date");
-					const x = new Date(co.value);
-					x.setDate(x.getDate() - 2);
-					ci.value = x.toISOString().slice(0, 16);
-				}
-
-			});
 			ciF.addEventListener("change", function () {
-				if (ciF.value < currentDateString) {
-					alert("Check in date must be after current date");
-					ciF.value = currentDateString;
-				}
-				if (ciF.value > coF.value) {
-					alert("Check in date must be before check out date");
-					const x = new Date(coF.value);
-					x.setDate(x.getDate() - 2);
-					ciF.value = x.toISOString().slice(0, 16);
+				let min = ciF.value;
+				if (min) {
+					coF.type = 'date';
+					coF.readOnly = false;
+					let minDate = new Date(min);
+					flatpickr("#coF", { minDate: minDate });
+					if (min > coF.value) {
+						coF.value = null;
+						coF.type = 'text';
+						coF.readOnly = true;
+					}
+					caculate();
+
 				}
 			});
+
 			const quantityRoom = document.getElementById("quantity-room");
 			const quantityPerson = document.getElementById("quantity-person");
 			const totalPrice = document.getElementById("total-price");
@@ -577,15 +593,29 @@
 					alert("Quanity must be greater than 0");
 					quantityRoom.value = 1;
 				}
-				totalPrice.innerHTML = "$" + quantityRoom.value * @Html.DisplayFor(m => m.Item1.Type.Price) + quanityPerson.value * 10;
+				caculate();
 			});
-			quantityPerson.addEventListener("change", function () {
-				if (quantityPerson.value < 1) {
-					alert("Quanity must be greater than 0");
-					quantityPerson.value = 1;
+			function caculate() {
+				var checkinDate = new Date(document.getElementById("ciF").value);
+				console.log(checkinDate);
+				var checkoutDate = new Date(document.getElementById("coF").value);
+				if (isNaN(checkinDate) || isNaN(checkoutDate)) {
+					totalPrice.innerHTML = "$" + quantityRoom.value * @Html.DisplayFor(m => m.Item1.Price);
+					return
 				}
-				totalPrice.innerHTML = "$" + quantityRoom.value * @Html.DisplayFor(m => m.Item1.Type.Price) + quantityPerson.value * 10;
-			});
+				checkinDate.setHours(0, 0, 0, 0);
+				checkoutDate.setHours(0, 0, 0, 0);
+				var timeDifference = checkoutDate.getTime() - checkinDate.getTime();
+				var daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+				if (daysDifference === 0) {
+					daysDifference = 1;
+				}
+				if (quantityRoom.value) {
+					totalPrice.innerHTML = "$" + quantityRoom.value * @Html.DisplayFor(m => m.Item1.Price)* daysDifference;
+
+				}
+
+			}
 		});
 	</script>
 </main>

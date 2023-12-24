@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/condition.css" />
+</head>
+<body>
+    <header>
+        <img class="logo" src="~/img/f9b20bcb-f3f1-4155-ac18-c5d04dad6f38.png" alt="">
+
+        <nav class="navigation">
+            <a href="" class="active">Conditions<span></span></a>
+            <a asp-controller="home" asp-action="index">Home<span></span></a>
+            <a asp-controller="login" asp-action="Access">Login<span></span></a>
+        </nav>
+    </header>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>

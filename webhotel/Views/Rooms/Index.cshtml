@@ -1,13 +1,18 @@
-﻿@model IEnumerable<webhotel.Models.Room>
-
+﻿@model Webhotel.Models.VMRooms;
 @{
 	ViewData["Title"] = "Rooms";
 }
+@if (TempData["Message"] != null)
+{
+	<script>
+		alert("@TempData["Message"]");
+	</script>
+}
 
 <main>
-	<div class="bn-room" style="background-image: url(~/img/bg_3.jpg.webp);">
+	<div class="bn-room bn-r-ra">
 		<div class="bn-room-content">
-			<span><a href="./index.html">Home></a>Rooms></span>
+			<span><a asp-controller="home" asp-action="index">Home></a>Rooms></span>
 			<div class="name">Cozzy Rooms</div>
 		</div>
 		<div class="container bk-container" style="background-color: #222222; z-index: 10;">
@@ -16,42 +21,36 @@
 					<div class="col-lg-3 booking-d">
 						<span>check in</span><div>
 							<i class="fa-solid fa-calendar-days"></i>
-							<input type="datetime-local" name="ci" id="ci" placeholder="date-check-in" pattern="\d{2}/\d{2}/\d{4}" value="">
+							<input type="date" name="ci" id="ci" placeholder="date-check-in" required pattern="\d{2}/\d{2}/\d{4}" value="">
 							<script>
 								document.addEventListener("DOMContentLoaded", function () {
-									const currentDate = new Date();
-									const nextDay = new Date();
-									nextDay.setDate(currentDate.getDate() + 1);
-
-									const currentDateString = currentDate.toISOString().slice(0, 16);
-									const nextDayString = nextDay.toISOString().slice(0, 16);
-
-									document.getElementById("ci").value = currentDateString;
-									document.getElementById("co").value = nextDayString;
+									flatpickr("#ci", { minDate: "today" });
 
 									const co = document.getElementById("co");
+
+
+									co.onclick = function (event) {
+										if (!ci.value) {
+											console.log(1);
+											ci.click();
+											return;
+										}
+									};
+
 									const ci = document.getElementById("ci");
-									co.addEventListener("change", function () {
-										if (ci.value > co.value) {
-											alert("Check out date must be after check in date");
-											const x = new Date(ci.value);
-											x.setDate(x.getDate() + 2);
-											co.value = x.toISOString().slice(0, 16);
-										}
-									});
-
 									ci.addEventListener("change", function () {
-										if (ci.value < currentDateString) {
-											alert("Check in date must be after current date");
-											ci.value = currentDateString;
-										}
-										if (ci.value > co.value) {
-											alert("Check in date must be before check out date");
-											const x = new Date(co.value);
-											x.setDate(x.getDate() - 2);
-											ci.value = x.toISOString().slice(0, 16);
-										}
+										let min = ci.value;
+										if (min) {
+											co.type = 'date';
+											co.readOnly = false;
+											let minDate = new Date(min);
+											flatpickr("#co", { minDate: minDate });
 
+											if (min > co.value) {
+												co.value = null;
+												co.type = 'text';
+											}
+										}
 									});
 								});
 
@@ -61,32 +60,27 @@
 					<div class="col-lg-3 booking-d">
 						<span>check out</span><div>
 							<i class="fa-solid fa-calendar-days"></i>
-							<input type="datetime-local" name="co" id="co" placeholder="date-check-out" pattern="\d{2}/\d{2}/\d{4}">
+							<input type="text" readonly name="co" id="co" placeholder="date-check-out" required pattern="\d{2}/\d{2}/\d{4}">
 						</div>
 					</div>
 					<div class="col-lg-2 booking-d">
 						<span>Room</span>
 						<div>
 							<select name="t" id="room-bk">
-								@if (Model != null && Model != null)
+								<option value="">Room Type</option>
+								@if (Model != null)
 								{
-									@for (int i = 0; i < Model.Count(); i++)
+									@for (int i = 0; i < Model.RoomTypename.Count(); i++)
 									{
-										<option value="@Model.ElementAt(i).Type.Name">@Html.DisplayFor(e => Model.ElementAt(i).Type.Name)</option>
+										<option value="@Model.RoomTypename.ElementAt(i).Id">@Html.DisplayFor(e => Model.RoomTypename.ElementAt(i).Name)</option>
 									}
 								}
 							</select>
 						</div>
 					</div>
 					<div class="col-lg-2 booking-d">
-						<span>Guest</span>
-						<select name="">
-							<option value="">1 Person</option>
-							<option value="">2 Person</option>
-							<option value="">3 Person</option>
-							<option value="">4 Person</option>
-							<option value="">5 Person</option>
-						</select>
+						<span>Quantity</span>
+						<input name="quantity" placeholder="Quantity" type="number" />
 					</div>
 					<div class="col-lg-2 booking-d">
 						<button type="submit" style="background: none; display: flex; flex-direction: column; justify-align: center; color: white; border: none; font-size: 22px; font-family: 'Old Standard TT, serif';">
@@ -99,62 +93,66 @@
 	</div>
 	<div class="container ctn-room-list">
 		<div class="row">
-			@for (int i = 0; i < Model.Count(); i++)
+			@if (!Model.check)
 			{
-				if ((i % 2) != 1)
+				@for (int i = 0; i < Model.RoomTypes.Count(); i++)
 				{
-					<div class="col-lg-4">
-						<div class="container-card-room hide-card">
-							<div class="card-bd-d">
-								<div class="content-card">
-									<div class="name-card">
-										@Html.DisplayFor(modelItem => Model.ElementAt(i).Type.Name)
+					if ((i % 2) != 1)
+					{
+						<div class="col-lg-4">
+							<div class="container-card-room hide-card">
+								<div class="card-bd-d">
+									<div class="content-card">
+										<div class="name-card">
+											@Html.DisplayFor(modelItem => Model.RoomTypes.ElementAt(i).Name)
+										</div>
+										<div class="des-card">
+											<p>@Html.DisplayFor(modelItem => Model.RoomTypes.ElementAt(i).Sumary)</p>
+										</div>
+										<div class="st-card">
+											<p>
+												<span>$@Html.DisplayFor(modelItem => Model.RoomTypes.ElementAt(i).Price)/Night</span>
+												@Html.ActionLink("BOOK NOW", "Detail", new { id = Model.RoomTypes.ElementAt(i).Id })
+											</p>
+										</div>
 									</div>
-									<div class="des-card">
-										<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-									</div>
-									<div class="st-card">
-										<p>
-											<span>$@Html.DisplayFor(modelItem => Model.ElementAt(i).Type.Price)/Night</span>
-											@Html.ActionLink("BOOK NOW", "Detail", new { id = Model.ElementAt(i).Id })
-										</p>
-									</div>
-								</div>
-								<a href="">
-									<div class="img-room" style="background-image: url(@Html.DisplayFor(modelItem => Model.ElementAt(i).Roomimgs.FirstOrDefault().Link));">
-									</div>
-								</a>
-							</div>
-						</div>
-					</div>
-				}
-				else
-				{
-					<div class="col-lg-4">
-						<div class="container-card-room hide-card">
-							<div class="card-bd-d">
-								<a href="">
-									<div class="img-room" style="background-image: url(@Html.DisplayFor(modelItem => Model.ElementAt(i).Roomimgs.FirstOrDefault().Link));">
-									</div>
-								</a>
-								<div class="content-card">
-									<div class="name-card">
-										@Html.DisplayFor(modelItem => Model.ElementAt(i).Type.Name)
-									</div>
-									<div class="des-card">
-										<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-									</div>
-									<div class="st-card">
-										<p>
-											<span>$@Html.DisplayFor(modelItem => Model.ElementAt(i).Type.Price)/Night</span>
-											@Html.ActionLink("BOOK NOW", "Detail", new { id = Model.ElementAt(i).Id })
-										</p>
-									</div>
+									<a href="">
+										<div class="img-room" style="background-image: url(@Html.DisplayFor(modelItem => Model.RoomTypes.ElementAt(i).Roomimgs.FirstOrDefault().Link));">
+										</div>
+									</a>
 								</div>
 							</div>
 						</div>
-					</div>
+					}
+					else
+					{
+						<div class="col-lg-4">
+							<div class="container-card-room hide-card">
+								<div class="card-bd-d">
+									<a href="">
+										<div class="img-room" style="background-image: url(@Html.DisplayFor(modelItem => Model.RoomTypes.ElementAt(i).Roomimgs.FirstOrDefault().Link));">
+										</div>
+									</a>
+									<div class="content-card">
+										<div class="name-card">
+											@Html.DisplayFor(modelItem => Model.RoomTypes.ElementAt(i).Name)
+										</div>
+										<div class="des-card">
+											<p>@Html.DisplayFor(modelItem => Model.RoomTypes.ElementAt(i).Sumary)</p>
+										</div>
+										<div class="st-card">
+											<p>
+												<span>$@Html.DisplayFor(modelItem => Model.RoomTypes.ElementAt(i).Price)/Night</span>
+												@Html.ActionLink("BOOK NOW", "Detail", new { id = Model.RoomTypes.ElementAt(i).Id })
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
 				}
 			}
 		</div>
 	</div>
+</main>

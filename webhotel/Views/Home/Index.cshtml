@@ -1,8 +1,9 @@
-﻿@model IEnumerable<webhotel.Models.Room>
+﻿@model IEnumerable<webhotel.Models.Roomtype>
 
 @{
     ViewData["Title"] = "Home";
 }
+
 
 <div class="container-bn">
     <div class="bn-slide" id="bn-slide">
@@ -589,35 +590,63 @@
         <div class="ft-home-name">Featured Rooms</div>
     </div>
     <div class="row">
-    @foreach (var item in Model) {
-        <div class="col-lg-4">
-            <div class="container-card-room hide-card">
-                <div class="card-bd-d">
-                    <div class="content-card">
-                        <div class="name-card">
-                            @Html.DisplayFor(modelItem => item.Type.Name)
-                        </div>
-                        <div class="des-card">
-                            <p>
-                                @Html.DisplayFor(modelItem => item.Type.Des)
-                            </p>
-                        </div>
-                        <div class="st-card">
-                            <p>
-                                <span>$@Html.DisplayFor(modelItem => item.Type.Price)/Night</span>
-                                @Html.ActionLink("BOOK NOW", "Detail", "Rooms", new { id = item.Id }, null)
-                            </p>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            if ((i % 2) != 1)
+            {
+                <div class="col-lg-4">
+                    <div class="container-card-room hide-card">
+                        <div class="card-bd-d">
+                            <div class="content-card">
+                                <div class="name-card">
+                                    @Html.DisplayFor(modelItem => Model.ElementAt(i).Name)
+                                </div>
+                                <div class="des-card">
+                                    <p>@Html.DisplayFor(modelItem => Model.ElementAt(i).Sumary)</p>
+                                </div>
+                                <div class="st-card">
+                                    <p>
+                                        <span>$@Html.DisplayFor(modelItem => Model.ElementAt(i).Price)/Night</span>
+                                        @Html.ActionLink("BOOK NOW", "Detail", new { id = Model.ElementAt(i).Id })
+                                    </p>
+                                </div>
+                            </div>
+                            <a href="">
+                                <div class="img-room" style="background-image: url(@Html.DisplayFor(modelItem => Model.ElementAt(i).Roomimgs.FirstOrDefault().Link));">
+                                </div>
+                            </a>
                         </div>
                     </div>
-                    <a href="">
-                        <div class="img-room"
-                                 style="background-image: url(@Html.DisplayFor(modelItem => item.Roomimgs.FirstOrDefault().Link)">
-                         </div>
-                    </a>
                 </div>
-            </div>
-        </div>
-    }
+            }
+            else
+            {
+                <div class="col-lg-4">
+                    <div class="container-card-room hide-card">
+                        <div class="card-bd-d">
+                            <a href="">
+                                <div class="img-room" style="background-image: url(@Html.DisplayFor(modelItem => Model.ElementAt(i).Roomimgs.FirstOrDefault().Link));">
+                                </div>
+                            </a>
+                            <div class="content-card">
+                                <div class="name-card">
+                                    @Html.DisplayFor(modelItem => Model.ElementAt(i).Name)
+                                </div>
+                                <div class="des-card">
+                                    <p>@Html.DisplayFor(modelItem => Model.ElementAt(i).Sumary)</p>
+                                </div>
+                                <div class="st-card">
+                                    <p>
+                                        <span>$@Html.DisplayFor(modelItem => Model.ElementAt(i).Price)/Night</span>
+                                        @Html.ActionLink("BOOK NOW", "Detail", new { id = Model.ElementAt(i).Id })
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
         <!-- <div class="col-lg-4">
             <div class="container-card-room hide-card">
                 <div class="card-bd-d">

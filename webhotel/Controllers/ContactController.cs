@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace webhotel.Controllers
+namespace Webhotel.Controllers
 {
     public class ContactController : Controller
     {

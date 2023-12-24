@@ -7,9 +7,9 @@ public partial class Roomimg
 {
     public int Id { get; set; }
 
-    public int? RoomId { get; set; }
+    public int? TypeId { get; set; }
 
     public string? Link { get; set; }
 
-    public virtual Room? Room { get; set; }
+    public virtual Roomtype? Type { get; set; }
 }

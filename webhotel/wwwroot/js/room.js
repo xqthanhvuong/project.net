@@ -14,28 +14,33 @@ window.addEventListener("scroll",()=>{
 }
 
 let sldroom = document.querySelectorAll(".ck");
-if (sldroom) {
+if (sldroom != null) {
+    let imgsl = document.querySelector(".sldf");
+    let mnbtnv = document.querySelectorAll(".mn-bt-nvg");
+    let sldsl = document.querySelectorAll(".sld");
+    let sldct = document.querySelector(".sld-s");
+    if (sldsl != null && sldct != null) {
+        sldct.style.width = sldsl.length * 100 + "%";
 
-let imgsl = document.querySelector(".sldf");
-let mnbtnv = document.querySelectorAll(".mn-bt-nvg");
-document.querySelector(".sld-s").style.width = document.querySelectorAll(".sld").length * 100 + "%";
-let nbmg = 100 / document.querySelectorAll(".sld").length;
-document.querySelectorAll(".sld").forEach((e) => {
-    e.style.width = nbmg + "%";
-})
-for (let i = 0; i < sldroom.length; i++) {
-    sldroom[i].addEventListener("change", () => {
-        let index = Array.from(sldroom).indexOf(
-            document.querySelector(".ck:checked")
-        );
-        imgsl.style.marginLeft = "-" + nbmg * index + "%";
-        for (let i = 0; i < mnbtnv.length; i++) {
-            mnbtnv[i].style.backgroundColor = "transparent";
-        }
-        mnbtnv[index].style.backgroundColor = "#fff";
-    });
+    }
+    let nbmg = 100 / document.querySelectorAll(".sld").length;
+    document.querySelectorAll(".sld").forEach((e) => {
+        e.style.width = nbmg + "%";
+    })
+    for (let i = 0; i < sldroom.length; i++) {
+        sldroom[i].addEventListener("change", () => {
+            let index = Array.from(sldroom).indexOf(
+                document.querySelector(".ck:checked")
+            );
+            imgsl.style.marginLeft = "-" + nbmg * index + "%";
+            for (let i = 0; i < mnbtnv.length; i++) {
+                mnbtnv[i].style.backgroundColor = "transparent";
+            }
+            mnbtnv[index].style.backgroundColor = "#fff";
+        });
+    }
 }
-}
+
 
 
 
