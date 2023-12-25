@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using webhotel.Models;
-
+using System.Net.Mail;
+using Webhotel.Helper;
 
 namespace webhotel.Controllers
 {
@@ -108,6 +109,60 @@ namespace webhotel.Controllers
 					_context.SaveChanges();
 				}
 			}
+			string emailBody = $@"
+    <p>Hello {name},</p>
+    <p>Thank you for your order.</p>
+    <p>We have confirmed your order and will contact you soon</p>
+	<p>
+		Your order details:
+		<ul>
+			<li>Check in: {checkin}</li>
+			<li>Check out: {checkout}</li>
+			<li>Room type: {_context.Roomtypes.Where(r => r.Id == roomtypeid).FirstOrDefault().Name}</li>
+			<li>Quantity: {quantity}</li>
+			<li>Total price: {ViewBag.CalculatedValue}</li>
+			<li>Customer name: {name}</li>
+			<li>Customer address: {address}</li>
+			<li>Customer phone: {phone}</li>
+			<li>Customer email: {email}</li>
+			<li>Customer citizen id: {citizenid}</li>
+		</ul>
+	</p>
+    <p>If you did not request order, please ignore this email.</p>
+    <p>Best regards,</p>
+    <p>CIAO hotel management team</p>";
+            var myAppConfig = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var userName = myAppConfig.GetValue<string>("EmailConfig:Username");
+            var Password = myAppConfig.GetValue<string>("EmailConfig:Password");
+            var Host = myAppConfig.GetValue<string>("EmailConfig:Host");
+            var Port = myAppConfig.GetValue<int>("EmailConfig:Port");
+            var FromEmail = myAppConfig.GetValue<string>("EmailConfig:FromEmail");
+
+            MailMessage message = new MailMessage();
+            message.From = new MailAddress(FromEmail);
+            message.To.Add(email);
+            message.Subject = "link to retrieve password of Ciao hotel";
+            message.IsBodyHtml = true;
+            message.Body = emailBody;
+            SmtpClient smtpClient = new SmtpClient(Host);
+            try
+            {
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.EnableSsl = true;
+                smtpClient.Credentials = new System.Net.NetworkCredential(userName, Password);
+                smtpClient.Host = Host;
+                smtpClient.Port = Port;
+                smtpClient.Send(message);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                smtpClient.Dispose();
+            }
 			return RedirectToAction("Index", "home");
 		}
 	}
